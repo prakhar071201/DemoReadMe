@@ -1,6 +1,7 @@
 # Data Prep Agent POC
 
 ## ⚠️ Note
+
 > Uploaded files get stored in the session. If you reset or close the tab, you will need to start over from the beginning.
 
 ---
@@ -10,15 +11,37 @@
 ### **1️⃣ Aggregation & Cleaning**
 
 #### **📝 Step 1: Upload File**
+
 - Upload a dataset to start the data preparation process.
 
+#### **🔹 Generate Cleaning Suggestions**
+
+- **Endpoint:** `/generate_cleaning_suggestions/`
+- **Method:** `POST`
+- **Payload:** `None`
+- **Response:** Returns suggested data cleaning actions (e.g., removing duplicates, filling missing values).
+
+#### **🔹 Apply Cleaning Suggestions**
+
+- **Endpoint:** `/apply_cleaning_suggestions/`
+- **Method:** `POST`
+- **Payload Format:**
+  ```json
+  {
+      "indices": [0, 2, 4]
+  }
+  ```
+- **Response:** Cleans the dataset based on the selected indices.
+
 #### **🔹 Generate Aggregation Suggestions**
+
 - **Endpoint:** `/aggregation_suggestions/`
 - **Method:** `POST`
 - **Payload:** `None`
 - **Response:** Returns suggestions for aggregating numerical columns.
 
 #### **🔹 Apply Aggregation Suggestions**
+
 - **Endpoint:** `/apply_aggregations_suggestions/`
 - **Method:** `POST`
 - **Payload Format:**
@@ -32,34 +55,162 @@
   ```
 - **Response:** Applies selected aggregation methods to the dataset.
 
-#### **🔹 Generate Cleaning Suggestions**
-- **Endpoint:** `/generate_cleaning_suggestions/`
-- **Method:** `POST`
-- **Payload:** `None`
-- **Response:** Returns suggested data cleaning actions (e.g., removing duplicates, filling missing values).
+#### **📝 File Naming Format**
 
-#### **🔹 Apply Cleaning Suggestions**
-- **Endpoint:** `/apply_clean_suggestions/`
+- **Original File:** `Original_FileName`
+- **Cleaned File:** `Clean_FileName`
+- **Aggregated File:** `Aggregate_FileName`
+
+---
+
+### **2️⃣ Joining Files**
+
+#### **🔹 Upload Files**
+
+- **Endpoint:** `/upload/`
 - **Method:** `POST`
 - **Payload Format:**
   ```json
   {
-      "indices": [0, 2, 4]
+      "file1": "File1.csv",
+      "file2": "File2.csv"
   }
   ```
-- **Response:** Cleans the dataset based on the selected indices.
+- **Response:** Uploads multiple files for joining operations.
+
+#### **🔹 Run Join Operation**
+
+- **Endpoint:** `/analyze-join-suggestions/`
+- **Method:** `POST`
+- **Payload:** `None`
+- **Response:** Joins files based on matching criteria.
+
+#### **📝 File Naming Format**
+
+- **Joined File:** `Join_FileName`
 
 ---
 
-### **2️⃣ [Work in Progress]**
-🚧 More steps will be added as the POC progresses.
+### **3️⃣ Feature Engineering**
+
+#### **🔹 Generate Feature Suggestions**
+
+- **Endpoint:** `/suggest_methods/`
+- **Method:** `POST`
+- **Payload:** `None`
+- **Response:** Suggests new feature transformations.
+
+#### **🔹 Apply Feature Suggestions**
+
+- **Endpoint:** `/apply_feature_selection_methods/`
+- **Method:** `POST`
+- **Payload Format:**
+  ```json
+  {
+    "selected_methods": [
+      {
+        "method_name": "variance_threshold",
+        "category": "variance_based",
+        "reason": "This method is suitable for removing numerical features with low variance, which helps in eliminating constant or near-constant features that do not contribute to the dataset.",
+        "priority": "high"
+      },
+      {
+        "method_name": "quasi_constant_removal",
+        "category": "variance_based",
+        "reason": "This method identifies and removes features where one value dominates, which is useful for both numerical and categorical features, ensuring that the dataset remains informative.",
+        "priority": "high"
+      }
+    ]
+  }
+  ```
+- **Response:** Applies feature selection methods.
+
+#### **📝 File Naming Format**
+
+- **Feature-Processed File:** `Feature_FileName`
 
 ---
 
-### **📌 Next Steps**
-- Add further processing stages such as **Feature Engineering, Data Splitting, Model Training, and Inference**.
-- Enhance the API for better validation and performance.
+### **4️⃣ Model Training & Inference**
+
+#### **🔹 Classification Steps**
+
+- **Endpoint:** `/model_training/`
+- **Method:** `POST`
+- **Payload:** `None`
+- **Response:** Trains the model on the dataset.
+
+#### **🔹 Model Selection**
+
+- **Endpoint:** `/model_selection/`
+- **Method:** `POST`
+- **Payload:** `None`
+- **Response:** Selects the best model based on evaluation metrics.
+
+#### **🔹 Model Inference**
+
+- **Endpoint:** `/model_inference/`
+- **Method:** `POST`
+- **Payload:** `None`
+- **Response:** Runs inference using the trained model.
+
+#### **📝 File Naming Format**
+
+- **Model Training File:** `ModelTraining_FileName`
+- **Model Inference File:** `ModelInfer_FileName`
 
 ---
+
+### **5️⃣ Download Processed Data**
+
+#### **🔹 Download CSV**
+
+- **Endpoint:** `/download_csv/`
+- **Method:** `POST`
+- **Payload Format:**
+  ```json
+  {
+      "filename": "Clean_FileName"
+  }
+  ```
+- **Response:** Downloads the requested processed dataset.
+
+---
+
+### **📌 API Endpoints**
+
+> Below are all the available API endpoints for you to use. The ones explained above are some of the most important endpoints.
+
+- `/upload_file_clean_agent/`
+- `/generate_cleaning_suggestions/`
+- `/apply_cleaning_suggestions/`
+- `/view_dataset/`
+- `/cleaning_summary/`
+- `/column_mapping/`
+- `/aggregation_suggestions/`
+- `/apply_aggregations_suggestions/`
+- `/upload/`
+- `/analyze-join-suggestions/`
+- `/identify_category/`
+- `/confirm_category/`
+- `/generate_field_mappings/`
+- `/confirm_suggested_mappings/`
+- `/modify_field_mappings/`
+- `/add_critical_fields/`
+- `/suggest_methods/`
+- `/apply_feature_selection_methods/`
+- `/download_csv/`
+- `/view_dataframe/`
+- `/reset_session/`
+- `/session_debug/`
+- `/validate_mappings/`
+- `/convert_data_types/`
+- `/leakage_detection/`
+- `/categorical_features/`
+- `/data_split/`
+- `/model_training/`
+- `/model_selection/`
+- `/model_inference/`
+
 🚀 **This POC aims to automate data preparation efficiently!** 🚀
 
