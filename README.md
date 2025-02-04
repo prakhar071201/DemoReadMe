@@ -17,7 +17,7 @@
 #### **🔹 Generate Cleaning Suggestions**
 
 - **Endpoint:** `/generate_cleaning_suggestions/`
-- **Method:** `POST`
+- **Method:** `GET`
 - **Payload:** `None`
 - **Response:** Returns suggested data cleaning actions (e.g., removing duplicates, filling missing values).
 
@@ -25,7 +25,7 @@
 
 - **Endpoint:** `/apply_cleaning_suggestions/`
 - **Method:** `POST`
-- **Payload Format:**
+- **Payload:** Leave empty to apply all suggestions or specify particular suggestions.
   ```json
   {
       "indices": [0, 2, 4]
@@ -36,7 +36,7 @@
 #### **🔹 Generate Aggregation Suggestions**
 
 - **Endpoint:** `/aggregation_suggestions/`
-- **Method:** `POST`
+- **Method:** `GET`
 - **Payload:** `None`
 - **Response:** Returns suggestions for aggregating numerical columns.
 
@@ -54,12 +54,6 @@
   }
   ```
 - **Response:** Applies selected aggregation methods to the dataset.
-
-#### **📝 File Naming Format**
-
-- **Original File:** `Original_FileName`
-- **Cleaned File:** `Clean_FileName`
-- **Aggregated File:** `Aggregate_FileName`
 
 ---
 
@@ -81,13 +75,9 @@
 #### **🔹 Run Join Operation**
 
 - **Endpoint:** `/analyze-join-suggestions/`
-- **Method:** `POST`
+- **Method:** `GET`
 - **Payload:** `None`
 - **Response:** Joins files based on matching criteria.
-
-#### **📝 File Naming Format**
-
-- **Joined File:** `Join_FileName`
 
 ---
 
@@ -96,7 +86,7 @@
 #### **🔹 Generate Feature Suggestions**
 
 - **Endpoint:** `/suggest_methods/`
-- **Method:** `POST`
+- **Method:** `GET`
 - **Payload:** `None`
 - **Response:** Suggests new feature transformations.
 
@@ -125,18 +115,14 @@
   ```
 - **Response:** Applies feature selection methods.
 
-#### **📝 File Naming Format**
-
-- **Feature-Processed File:** `Feature_FileName`
-
 ---
 
 ### **4️⃣ Model Training & Inference**
 
-#### **🔹 Classification Steps**
+#### **🔹 Model Training**
 
 - **Endpoint:** `/model_training/`
-- **Method:** `POST`
+- **Method:** `GET`
 - **Payload:** `None`
 - **Response:** Trains the model on the dataset.
 
@@ -150,14 +136,9 @@
 #### **🔹 Model Inference**
 
 - **Endpoint:** `/model_inference/`
-- **Method:** `POST`
+- **Method:** `GET`
 - **Payload:** `None`
 - **Response:** Runs inference using the trained model.
-
-#### **📝 File Naming Format**
-
-- **Model Training File:** `ModelTraining_FileName`
-- **Model Inference File:** `ModelInfer_FileName`
 
 ---
 
@@ -170,7 +151,7 @@
 - **Payload Format:**
   ```json
   {
-      "filename": "Clean_FileName"
+      "stage": "Feature Engineering"
   }
   ```
 - **Response:** Downloads the requested processed dataset.
