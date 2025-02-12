@@ -1,100 +1,193 @@
-# Data Prep Agent POC
 
-## ⚠️ Note
+# 🚀 **Data Prep Agent POC**
 
-> Uploaded files get stored in the session. If you reset or close the tab, you will need to start over from the beginning.
+A Proof of Concept (POC) showcasing how data preparation can be automated using intelligent agents. This open-source project demonstrates how businesses can utilize these agents to handle data cleaning, aggregation, feature engineering, model training, and inference with ease. 
+
+## ⚠️ **Note**
+
+> Uploaded files are stored in the session. If you refresh or close the tab, the session will be lost, and you'll need to restart the process.
 
 ---
 
-## 📌 **Stages in Data Preparation**
+## 📦 **Project Setup**
+
+### 🖥️ **Backend Setup**
+
+1. **Clone the Repository:**
+
+   ```bash
+   git clone <repository-link>
+   cd <repository-folder>
+   ```
+
+2. **Create a Virtual Environment:**
+
+   ```bash
+   python -m venv venv
+   ```
+
+3. **Activate the Virtual Environment:**
+
+   - **For Windows:**
+     ```bash
+     venv\Scripts\activate
+     ```
+   - **For macOS/Linux:**
+     ```bash
+     source venv/bin/activate
+     ```
+
+4. **Install the Required Packages:**
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+5. **Export the OpenAI API Key:**
+
+   ```bash
+   export OPENAI_API_KEY="your-openai-api-key"
+   ```
+
+6. **Start the Backend Server:**
+
+   ```bash
+   python manage.py runserver
+   ```
+
+---
+
+### 🌐 **Frontend Setup**
+
+1. **Clone the Repository:**
+
+   ```bash
+   git clone <repository-link>
+   cd <frontend-folder>
+   ```
+
+2. **Install Dependencies:**
+
+   ```bash
+   npm install
+   ```
+
+3. **Run the Frontend:**
+
+   ```bash
+   npm start
+   ```
+
+---
+
+## ⚙️ **Making Changes**
+
+### 📡 **Adding New APIs**
+
+- Add new API functions inside `apiCalls.js` for easy integration with the frontend.
+- Example:
+  ```javascript
+  export const newApiFunction = async (payload) => {
+    const response = await axios.post("/new-endpoint/", payload);
+    return response.data;
+  };
+  ```
+
+### 🧩 **Creating New Components**
+
+- Build reusable components based on the APIs.
+- Check the `components` folder for examples of existing components.
+
+### 🗃️ **Backend Development**
+
+- Create APIs using agents in the `views.py` file.
+- Register new APIs in `urls.py` to expose them for frontend use.
+
+---
+
+## 📊 **Stages in Data Preparation**
 
 ### **1️⃣ Aggregation & Cleaning**
 
-#### **📝 Step 1: Upload File**
+#### 🗂️ **Upload File**
 
-- Upload a dataset to start the data preparation process.
+- Upload your dataset to begin the data preparation process.
 
-#### **🔹 Generate Cleaning Suggestions**
+#### 🔹 **Generate Cleaning Suggestions**
 
 - **Endpoint:** `/generate_cleaning_suggestions/`
 - **Method:** `GET`
-- **Payload:** `None`
-- **Response:** Returns suggested data cleaning actions (e.g., removing duplicates, filling missing values).
+- **Response:** Suggested actions like removing duplicates, filling missing values, etc.
 
-#### **🔹 Apply Cleaning Suggestions**
+#### 🔹 **Apply Cleaning Suggestions**
 
 - **Endpoint:** `/apply_cleaning_suggestions/`
 - **Method:** `POST`
-- **Payload:** Leave empty to apply all suggestions or specify particular suggestions.
+- **Payload:**
   ```json
   {
-      "indices": [0, 2, 4]
+    "indices": [0, 2, 4]
   }
   ```
-- **Response:** Cleans the dataset based on the selected indices.
+- Apply suggestions selectively or apply all by leaving the payload empty.
 
-#### **🔹 Generate Aggregation Suggestions**
+#### 🔹 **Generate Aggregation Suggestions**
 
 - **Endpoint:** `/aggregation_suggestions/`
 - **Method:** `GET`
-- **Payload:** `None`
-- **Response:** Returns suggestions for aggregating numerical columns.
+- **Response:** Suggestions for aggregating numerical columns.
 
-#### **🔹 Apply Aggregation Suggestions**
+#### 🔹 **Apply Aggregation Suggestions**
 
 - **Endpoint:** `/apply_aggregations_suggestions/`
 - **Method:** `POST`
-- **Payload Format:**
+- **Payload:**
   ```json
   {
-      "selected_methods": {
-          "total_seats": ["mean", "max"],
-          "assigned_seats": ["median", "min"]
-      }
+    "selected_methods": {
+      "total_seats": ["mean", "max"],
+      "assigned_seats": ["median", "min"]
+    }
   }
   ```
-- **Response:** Applies selected aggregation methods to the dataset.
 
 ---
 
 ### **2️⃣ Joining Files**
 
-#### **🔹 Upload Files**
+#### 🔹 **Upload Files**
 
 - **Endpoint:** `/upload/`
 - **Method:** `POST`
-- **Payload Format:**
+- **Payload:**
   ```json
   {
-      "file1": "File1.csv",
-      "file2": "File2.csv"
+    "file1": "File1.csv",
+    "file2": "File2.csv"
   }
   ```
-- **Response:** Uploads multiple files for joining operations.
 
-#### **🔹 Run Join Operation**
+#### 🔹 **Run Join Operation**
 
 - **Endpoint:** `/analyze-join-suggestions/`
 - **Method:** `GET`
-- **Payload:** `None`
-- **Response:** Joins files based on matching criteria.
+- Automatically identifies and joins files based on matching columns.
 
 ---
 
 ### **3️⃣ Feature Engineering**
 
-#### **🔹 Generate Feature Suggestions**
+#### 🔹 **Generate Feature Suggestions**
 
 - **Endpoint:** `/suggest_methods/`
 - **Method:** `GET`
-- **Payload:** `None`
-- **Response:** Suggests new feature transformations.
+- Suggests potential transformations and new features to enhance model performance.
 
-#### **🔹 Apply Feature Suggestions**
+#### 🔹 **Apply Feature Suggestions**
 
 - **Endpoint:** `/apply_feature_selection_methods/`
 - **Method:** `POST`
-- **Payload Format:**
+- **Payload:**
   ```json
   {
     "selected_methods": [
@@ -113,52 +206,48 @@
     ]
   }
   ```
-- **Response:** Applies feature selection methods.
 
 ---
 
 ### **4️⃣ Model Training & Inference**
 
-#### **🔹 Model Training**
+#### 🔹 **Model Training**
 
 - **Endpoint:** `/model_training/`
 - **Method:** `GET`
-- **Payload:** `None`
-- **Response:** Trains the model on the dataset.
+- Trains the model on the dataset.
 
-#### **🔹 Model Selection**
+#### 🔹 **Model Selection**
 
 - **Endpoint:** `/model_selection/`
 - **Method:** `POST`
-- **Payload:** `None`
-- **Response:** Selects the best model based on evaluation metrics.
+- Selects the best model based on evaluation metrics.
 
-#### **🔹 Model Inference**
+#### 🔹 **Model Inference**
 
 - **Endpoint:** `/model_inference/`
 - **Method:** `GET`
-- **Payload:** `None`
-- **Response:** Runs inference using the trained model.
+- Runs inference using the trained model.
 
 ---
 
 ### **5️⃣ Download Processed Data**
 
-#### **🔹 Download CSV**
+#### 🔹 **Download CSV**
 
 - **Endpoint:** `/download_csv/`
 - **Method:** `POST`
-- **Payload Format:**
+- **Payload:**
   ```json
   {
-      "stage": "Feature Engineering"
+    "stage": "Feature Engineering"
   }
   ```
-- **Response:** Downloads the requested processed dataset.
+- Downloads the requested processed dataset.
 
 ---
 
-### **📌 API Endpoints**
+## 📌 **API Endpoints**
 
 > Below are all the available API endpoints for you to use. The ones explained above are some of the most important endpoints.
 
@@ -193,5 +282,38 @@
 - `/model_selection/`
 - `/model_inference/`
 
-🚀 **This POC aims to automate data preparation efficiently!** 🚀
+---
 
+## 🤖 **Why This POC?**
+This project demonstrates the power of automation in data preparation. By leveraging intelligent agents, we can:
+
+- **Save Time**: Automate repetitive tasks like cleaning and feature engineering.
+- **Improve Accuracy**: Reduce human error with algorithmic checks.
+- **Flexible Architecture**: Add new APIs and components effortlessly.
+
+---
+
+## 🚀 Contribute to the Project
+
+Want to improve this project? Feel free to open issues, submit pull requests, and suggest new features!
+
+```bash
+# Fork this repository
+# Create a new branch
+git checkout -b feature-new-api
+
+# Make your changes
+# Commit and push
+git add .
+git commit -m "Added new API for data analysis"
+git push origin feature-new-api
+```
+
+---
+
+## 💬 Connect with Us
+
+If you have questions, suggestions, or want to collaborate, feel free to reach out via issues or pull requests.
+
+
+🚀 **This POC aims to automate data preparation efficiently!** 🚀
